@@ -1,0 +1,59 @@
+// Example Redux in React
+
+// index.js
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+
+const initialState = {
+  counter: 5,
+};
+
+function rootReducer(state = initialState, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return { counter: state.counter + 1 };
+    case "DECREMENT":
+      return { counter: state.counter - 1 };
+    default:
+      return state;
+  }
+}
+
+const store = createStore(rootReducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
+
+// App.js
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+function Counter() {
+  const counter = useSelector((state) => state.counter);
+  const dispatch = useDispatch();
+
+  function handleIncrement() {
+    dispatch({ type: "INCREMENT" });
+  }
+
+  function handleDecrement() {
+    dispatch({ type: "DECREMENT" });
+  }
+
+  return (
+    <div>
+      <p>Counter: {counter}</p>
+      <button onClick={handleIncrement}>+</button>
+      <button onClick={handleDecrement}>-</button>
+    </div>
+  );
+}
+
+export default Counter;
